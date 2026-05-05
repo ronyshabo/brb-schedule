@@ -1,0 +1,429 @@
+/* ── CSS custom properties for shift colours ─────────────────────────────── */
+:root {
+  --shift-opening: #d97706;   /* amber  – morning */
+  --shift-closing: #6d28d9;   /* violet – evening */
+  --shift-shared:  #059669;   /* emerald – daytime */
+}
+
+/* ── Schedule layout ─────────────────────────────────────────────────────── */
+.schedule-layout {
+  display: flex;
+  height: calc(100vh - 56px);  /* subtract navbar */
+  overflow: hidden;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.shift-sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: #130e07;
+  border-right: 1px solid #3a2a14;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1rem;
+  overflow-y: auto;
+  gap: 0.5rem;
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #7a6040;
+  margin-bottom: 0.4rem;
+}
+
+.sidebar-hint {
+  font-size: 0.75rem;
+  color: #5a4030;
+  margin-bottom: 0.75rem;
+}
+
+.shift-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* ── Draggable shift blocks ──────────────────────────────────────────────── */
+.shift-block {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 10px;
+  border: 2px solid;
+  font-size: 0.9rem;
+  font-weight: 600;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+
+.shift-block:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.shift-block--opening {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: var(--shift-opening);
+  color: #fcd34d;
+}
+
+.shift-block--closing {
+  background: rgba(109, 40, 217, 0.15);
+  border-color: var(--shift-closing);
+  color: #c4b5fd;
+}
+
+.shift-block--shared {
+  background: rgba(5, 150, 105, 0.15);
+  border-color: var(--shift-shared);
+  color: #6ee7b7;
+}
+
+.shift-block--overlay {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  transform: rotate(2deg);
+}
+
+.shift-block__emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.shift-block__label {
+  flex: 1;
+}
+
+/* ── Sidebar divider & barista list ─────────────────────────────────────── */
+.sidebar-divider {
+  height: 1px;
+  background: #2a1a08;
+  margin: 0.5rem 0;
+}
+
+.sidebar-baristas__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.refresh-btn {
+  background: none;
+  border: 1px solid #4a3520;
+  color: #a8896b;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: #2a1a08;
+  color: #d4a96a;
+}
+
+.refresh-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.barista-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.barista-list__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #c4a47a;
+}
+
+.barista-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.no-baristas {
+  font-size: 0.82rem;
+  color: #5a4030;
+}
+
+/* ── Main schedule area ──────────────────────────────────────────────────── */
+.schedule-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.25rem 1.5rem 0;
+}
+
+/* ── Month nav ───────────────────────────────────────────────────────────── */
+.schedule-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.schedule-month-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #f0e6d3;
+  min-width: 180px;
+  text-align: center;
+}
+
+.nav-btn {
+  background: #1e1209;
+  border: 1px solid #4a3520;
+  color: #d4a96a;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.nav-btn:hover {
+  background: #2a1a08;
+}
+
+/* ── Calendar ────────────────────────────────────────────────────────────── */
+.month-calendar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
+}
+
+.calendar-header__cell {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #7a6040;
+  padding: 0.4rem 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 0.5rem;
+}
+
+/* ── Calendar cells ──────────────────────────────────────────────────────── */
+.calendar-cell {
+  background: #1a1208;
+  border: 1px solid #2a1e0f;
+  border-radius: 8px;
+  min-height: 90px;
+  padding: 0.4rem 0.35rem 0.35rem;
+  transition: background 0.12s, border-color 0.12s;
+  position: relative;
+}
+
+.calendar-cell--outside {
+  opacity: 0.35;
+}
+
+.calendar-cell--today {
+  border-color: #d97706;
+  background: #1f1508;
+}
+
+.calendar-cell--over {
+  background: #261c0a;
+  border-color: #d97706;
+  box-shadow: inset 0 0 0 2px rgba(217, 119, 6, 0.4);
+}
+
+.calendar-cell__day {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #7a6040;
+  margin-bottom: 0.3rem;
+}
+
+.calendar-cell--today .calendar-cell__day {
+  color: #fcd34d;
+}
+
+.calendar-cell__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+/* ── Shift chips ─────────────────────────────────────────────────────────── */
+.shift-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 4px 1px 3px;
+  border-radius: 5px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  max-width: 100%;
+}
+
+.shift-chip--opening {
+  background: rgba(217, 119, 6, 0.2);
+  border-color: rgba(217, 119, 6, 0.5);
+  color: #fcd34d;
+}
+
+.shift-chip--closing {
+  background: rgba(109, 40, 217, 0.2);
+  border-color: rgba(109, 40, 217, 0.5);
+  color: #c4b5fd;
+}
+
+.shift-chip--shared {
+  background: rgba(5, 150, 105, 0.2);
+  border-color: rgba(5, 150, 105, 0.5);
+  color: #6ee7b7;
+}
+
+/* Pending: dashed border, lighter opacity */
+.shift-chip--pending {
+  opacity: 0.75;
+  border-style: dashed;
+}
+
+.shift-chip__emoji {
+  font-size: 0.65rem;
+  line-height: 1;
+}
+
+.shift-chip__avatar {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.shift-chip__remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  padding: 0 0 0 1px;
+  opacity: 0.6;
+  transition: opacity 0.1s;
+}
+
+.shift-chip__remove:hover {
+  opacity: 1;
+}
+
+/* ── Confirm bar ─────────────────────────────────────────────────────────── */
+.schedule-confirm-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 0.85rem 0 1rem;
+  border-top: 1px solid #2a1a08;
+  margin-top: 0.5rem;
+}
+
+.btn-confirm {
+  background: #d97706;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  padding: 0.65rem 1.5rem;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background: #b45309;
+}
+
+.btn-confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.status-msg {
+  font-size: 0.88rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+}
+
+.status-msg--success {
+  background: rgba(5, 150, 105, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(5, 150, 105, 0.4);
+}
+
+.status-msg--error {
+  background: rgba(248, 113, 113, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+/* ── Loading state ───────────────────────────────────────────────────────── */
+.schedule-loading {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #7a6040;
+  font-size: 1rem;
+}

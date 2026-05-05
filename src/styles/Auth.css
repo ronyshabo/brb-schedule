@@ -1,0 +1,150 @@
+/* ── Auth container ──────────────────────────────────────────────────────── */
+.auth-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background: radial-gradient(ellipse at center, #2a1a08 0%, #0f0a05 70%);
+}
+
+.auth-card {
+  background: #1e1209;
+  border: 1px solid #3a2a14;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.auth-logo {
+  font-size: 3rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.auth-card h1 {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d97706;
+  margin-bottom: 0.25rem;
+}
+
+.auth-card h2 {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 400;
+  color: #a8896b;
+  margin-bottom: 1.75rem;
+}
+
+/* ── Form elements ───────────────────────────────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #c4a47a;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.form-group input,
+.form-group select {
+  background: #120d06;
+  border: 1px solid #4a3520;
+  border-radius: 8px;
+  color: #f0e6d3;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.85rem;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.form-group input::placeholder {
+  color: #6b5030;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #d97706;
+}
+
+.form-group select option {
+  background: #1e1209;
+}
+
+.form-group small {
+  font-size: 0.78rem;
+  color: #7a6040;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem;
+  background: #d97706;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #b45309;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Error / switch ──────────────────────────────────────────────────────── */
+.error {
+  color: #f87171;
+  font-size: 0.88rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(248, 113, 113, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid #f87171;
+}
+
+.loading-text {
+  color: #a8896b;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.auth-switch {
+  text-align: center;
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  color: #a8896b;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #d97706;
+  cursor: pointer;
+  font-size: inherit;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.link-btn:hover {
+  color: #f59e0b;
+}

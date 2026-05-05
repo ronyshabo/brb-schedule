@@ -1,0 +1,68 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Navbar ──────────────────────────────────────────────────────────────── */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 56px;
+  background: #0f0a05;
+  border-bottom: 1px solid #3a2a14;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar__brand {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #d97706;
+  letter-spacing: 0.02em;
+}
+
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar__user {
+  font-size: 0.9rem;
+  color: #a8896b;
+}
+
+.navbar__logout {
+  background: transparent;
+  border: 1px solid #6b4e2a;
+  color: #d4a96a;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.navbar__logout:hover {
+  background: #2a1a08;
+}
+
+/* ── App loading ─────────────────────────────────────────────────────────── */
+.app-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+  color: #a8896b;
+  font-size: 1rem;
+}
+
+.app-loading span {
+  font-size: 3rem;
+}

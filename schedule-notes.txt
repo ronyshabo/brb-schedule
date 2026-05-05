@@ -1,0 +1,11 @@
+SSH into your AWS EC2 instance:
+  ssh -i brb-key.pem ubuntu@18.191.96.186
+
+Port: 3005 (reverse-proxied as schedule.brbcoffee-atx.com)
+Dev port: 5176
+
+Build and run:
+  docker build --build-arg VITE_FIREBASE_API_KEY=... -t brb-schedule .
+  docker run -d --name brb-schedule --restart unless-stopped -p 3004:80 brb-schedule
+
+See README.md for full deploy instructions.
