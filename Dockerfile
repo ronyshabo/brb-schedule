@@ -1,26 +1,26 @@
+# syntax=docker/dockerfile:1.6
+
 # Stage 1: Build
-FROM node:18-bullseye AS builder
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Accept build arguments (Vite bakes these into the static bundle at build time)
-ARG VITE_FIREBASE_API_KEY
-ARG VITE_FIREBASE_AUTH_DOMAIN
-ARG VITE_FIREBASE_PROJECT_ID
-ARG VITE_FIREBASE_STORAGE_BUCKET
-ARG VITE_FIREBASE_MESSAGING_SENDER_ID
-ARG VITE_FIREBASE_APP_ID
-
-ENV VITE_FIREBASE_API_KEY=$VITE_FIREBASE_API_KEY
-ENV VITE_FIREBASE_AUTH_DOMAIN=$VITE_FIREBASE_AUTH_DOMAIN
-ENV VITE_FIREBASE_PROJECT_ID=$VITE_FIREBASE_PROJECT_ID
-ENV VITE_FIREBASE_STORAGE_BUCKET=$VITE_FIREBASE_STORAGE_BUCKET
-ENV VITE_FIREBASE_MESSAGING_SENDER_ID=$VITE_FIREBASE_MESSAGING_SENDER_ID
-ENV VITE_FIREBASE_APP_ID=$VITE_FIREBASE_APP_ID
-
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
-RUN npm run build
+# Secrets are mounted at /run/secrets/ and never stored in any image layer
+RUN --mount=type=secret,id=VITE_FIREBASE_API_KEY \
+	--mount=type=secret,id=VITE_FIREBASE_AUTH_DOMAIN \
+	--mount=type=secret,id=VITE_FIREBASE_PROJECT_ID \
+	--mount=type=secret,id=VITE_FIREBASE_STORAGE_BUCKET \
+	--mount=type=secret,id=VITE_FIREBASE_MESSAGING_SENDER_ID \
+	--mount=type=secret,id=VITE_FIREBASE_APP_ID \
+	/bin/sh -c 'export VITE_FIREBASE_API_KEY="$(cat /run/secrets/VITE_FIREBASE_API_KEY)" && \
+	export VITE_FIREBASE_AUTH_DOMAIN="$(cat /run/secrets/VITE_FIREBASE_AUTH_DOMAIN)" && \
+	export VITE_FIREBASE_PROJECT_ID="$(cat /run/secrets/VITE_FIREBASE_PROJECT_ID)" && \
+	export VITE_FIREBASE_STORAGE_BUCKET="$(cat /run/secrets/VITE_FIREBASE_STORAGE_BUCKET)" && \
+	export VITE_FIREBASE_MESSAGING_SENDER_ID="$(cat /run/secrets/VITE_FIREBASE_MESSAGING_SENDER_ID)" && \
+	export VITE_FIREBASE_APP_ID="$(cat /run/secrets/VITE_FIREBASE_APP_ID)" && \
+	npm run build'
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
