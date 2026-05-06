@@ -8,6 +8,7 @@ import {
   setDoc,
   serverTimestamp,
   query,
+  where,
   orderBy,
 } from 'firebase/firestore'
 import { auth, db } from '../firebase/config'
@@ -31,7 +32,7 @@ function SignUp({ setShowSignUp }) {
         const snapshot = await getDocs(q)
         const unlinked = snapshot.docs
           .map((d) => ({ id: d.id, ...d.data() }))
-          .filter((b) => b.active && !b.uid)
+          .filter((b) => b.active)
         setBaristas(unlinked)
       } catch (err) {
         setError('Could not load barista list. Please try again.')

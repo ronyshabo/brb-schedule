@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../firebase/config'
 import '../styles/Auth.css'
 
@@ -38,9 +38,28 @@ function Login({ setShowSignUp }) {
       // Verify the user is a registered barista
       const scheduleUserDoc = await getDoc(doc(db, 'scheduleUsers', uid))
       if (!scheduleUserDoc.exists()) {
-        await auth.signOut()
-        setError('Your account is not linked to a barista profile. Please sign up first.')
-        return
+        // Try to auto-link by matching email in baristas collection
+        const baristaQuery = query(
+          collection(db, 'baristas'),
+          where('email', '==', trimmedEmail)
+        )
+        const baristaSnap = await getDocs(baristaQuery)
+        if (baristaSnap.empty) {
+          await auth.signOut()
+          setError('Your account is not linked to a barista profile. Please sign up first.')
+          return
+        }
+        const baristaDoc = baristaSnap.docs[0]
+        const barista = baristaDoc.data()
+        // Auto-create the scheduleUsers doc and update the barista's uid
+        await setDoc(doc(db, 'scheduleUsers', uid), {
+          uid,
+          baristaId: baristaDoc.id,
+          baristaName: barista.name,
+          email: trimmedEmail,
+          createdAt: serverTimestamp(),
+        })
+        await updateDoc(doc(db, 'baristas', baristaDoc.id), { uid, linkedAt: serverTimestamp() })
       }
       // onAuthStateChanged in App.jsx will handle the rest
     } catch (err) {
