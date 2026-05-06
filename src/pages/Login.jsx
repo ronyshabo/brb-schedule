@@ -35,31 +35,30 @@ function Login({ setShowSignUp }) {
       const userCredential = await signInWithEmailAndPassword(auth, trimmedEmail, password)
       const uid = userCredential.user.uid
 
-      // Verify the user is a registered barista
-      const scheduleUserDoc = await getDoc(doc(db, 'scheduleUsers', uid))
-      if (!scheduleUserDoc.exists()) {
-        // Try to auto-link by matching email in baristas collection
-        const baristaQuery = query(
-          collection(db, 'baristas'),
-          where('email', '==', trimmedEmail)
-        )
-        const baristaSnap = await getDocs(baristaQuery)
-        if (baristaSnap.empty) {
-          await auth.signOut()
-          setError('Your account is not linked to a barista profile. Please sign up first.')
-          return
+      // Best-effort: create scheduleUsers doc if missing, but don't block login on failure
+      try {
+        const scheduleUserDoc = await getDoc(doc(db, 'scheduleUsers', uid))
+        if (!scheduleUserDoc.exists()) {
+          const baristaQuery = query(
+            collection(db, 'baristas'),
+            where('email', '==', trimmedEmail)
+          )
+          const baristaSnap = await getDocs(baristaQuery)
+          if (!baristaSnap.empty) {
+            const baristaDoc = baristaSnap.docs[0]
+            const barista = baristaDoc.data()
+            await setDoc(doc(db, 'scheduleUsers', uid), {
+              uid,
+              baristaId: baristaDoc.id,
+              baristaName: barista.name,
+              email: trimmedEmail,
+              createdAt: serverTimestamp(),
+            })
+            await updateDoc(doc(db, 'baristas', baristaDoc.id), { uid, linkedAt: serverTimestamp() })
+          }
         }
-        const baristaDoc = baristaSnap.docs[0]
-        const barista = baristaDoc.data()
-        // Auto-create the scheduleUsers doc and update the barista's uid
-        await setDoc(doc(db, 'scheduleUsers', uid), {
-          uid,
-          baristaId: baristaDoc.id,
-          baristaName: barista.name,
-          email: trimmedEmail,
-          createdAt: serverTimestamp(),
-        })
-        await updateDoc(doc(db, 'baristas', baristaDoc.id), { uid, linkedAt: serverTimestamp() })
+      } catch (firestoreErr) {
+        console.warn('Firestore link check failed, proceeding with login:', firestoreErr)
       }
       // onAuthStateChanged in App.jsx will handle the rest
     } catch (err) {

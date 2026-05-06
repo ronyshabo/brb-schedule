@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
-import { doc, getDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc, updateDoc, collection, query, where, getDocs, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from './firebase/config'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
@@ -16,21 +16,45 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
-        try {
-          const scheduleUserSnap = await getDoc(doc(db, 'scheduleUsers', currentUser.uid))
-          if (scheduleUserSnap.exists()) {
-            setUser(currentUser)
-            setBarista({ id: scheduleUserSnap.id, ...scheduleUserSnap.data() })
-          } else {
-            // Signed in but not a registered barista — sign them out immediately
-            await signOut(auth)
+          try {
+            let scheduleUserSnap = await getDoc(doc(db, 'scheduleUsers', currentUser.uid))
+            if (!scheduleUserSnap.exists()) {
+              // Try to auto-link by email from baristas collection
+              const baristaQuery = query(
+                collection(db, 'baristas'),
+                where('email', '==', currentUser.email)
+              )
+              const baristaSnap = await getDocs(baristaQuery)
+              if (!baristaSnap.empty) {
+                const baristaDoc = baristaSnap.docs[0]
+                const barista = baristaDoc.data()
+                await setDoc(doc(db, 'scheduleUsers', currentUser.uid), {
+                  uid: currentUser.uid,
+                  baristaId: baristaDoc.id,
+                  baristaName: barista.name,
+                  email: currentUser.email,
+                  createdAt: serverTimestamp(),
+                })
+                await updateDoc(doc(db, 'baristas', baristaDoc.id), {
+                  uid: currentUser.uid,
+                  linkedAt: serverTimestamp(),
+                })
+                scheduleUserSnap = await getDoc(doc(db, 'scheduleUsers', currentUser.uid))
+              }
+            }
+            if (scheduleUserSnap.exists()) {
+              setUser(currentUser)
+              setBarista({ id: scheduleUserSnap.id, ...scheduleUserSnap.data() })
+            } else {
+              // Signed in but not a registered barista — sign them out immediately
+              await signOut(auth)
+              setUser(null)
+              setBarista(null)
+            }
+          } catch {
             setUser(null)
             setBarista(null)
           }
-        } catch {
-          setUser(null)
-          setBarista(null)
-        }
       } else {
         setUser(null)
         setBarista(null)
