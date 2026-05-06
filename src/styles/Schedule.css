@@ -57,6 +57,7 @@
   font-size: 0.9rem;
   font-weight: 600;
   user-select: none;
+  touch-action: none; /* prevents browser scroll hijack during drag on mobile */
   transition: transform 0.1s, box-shadow 0.1s;
 }
 
