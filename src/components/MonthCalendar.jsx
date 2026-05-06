@@ -9,7 +9,15 @@ import {
 } from 'date-fns'
 import CalendarCell from './CalendarCell'
 
-const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+const DAY_LABELS = [
+  { long: 'Mon', short: 'M' },
+  { long: 'Tue', short: 'T' },
+  { long: 'Wed', short: 'W' },
+  { long: 'Thu', short: 'T' },
+  { long: 'Fri', short: 'F' },
+  { long: 'Sat', short: 'S' },
+  { long: 'Sun', short: 'S' },
+]
 
 function MonthCalendar({
   currentMonth,
@@ -30,11 +38,13 @@ function MonthCalendar({
     <div className="month-calendar">
       {/* Day-of-week header */}
       <div className="calendar-header">
-        {DAY_LABELS.map((d) => (
-          <div key={d} className="calendar-header__cell">
-            {d}
+        {DAY_LABELS.map((d, i) => (
+          <div key={i} className="calendar-header__cell">
+            <span className="day-label-long">{d.long}</span>
+            <span className="day-label-short">{d.short}</span>
           </div>
         ))}
+      </div>
       </div>
 
       {/* Day grid */}

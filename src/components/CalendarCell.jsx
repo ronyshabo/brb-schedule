@@ -11,6 +11,7 @@ function CalendarCell({ date, dateStr, isCurrentMonth, confirmedShifts, pendingS
     date.getMonth() === today.getMonth() &&
     date.getFullYear() === today.getFullYear()
 
+  const dow = date.getDay() // 0 = Sun, 5 = Fri, 6 = Sat
   const shiftOrder = ['opening', 'closing', 'shared']
 
   return (
@@ -40,6 +41,7 @@ function CalendarCell({ date, dateStr, isCurrentMonth, confirmedShifts, pendingS
                   key={entry.id}
                   shiftType={shiftType}
                   name={entry.baristaName}
+                  time={SHIFT_META[shiftType].getTime(dow)}
                   isPending={false}
                   canRemove={entry.baristaId === currentUserId}
                   onRemove={() => onRemoveConfirmed(entry.id)}
@@ -51,6 +53,7 @@ function CalendarCell({ date, dateStr, isCurrentMonth, confirmedShifts, pendingS
                 <ShiftChip
                   shiftType={shiftType}
                   name="You"
+                  time={SHIFT_META[shiftType].getTime(dow)}
                   isPending={true}
                   canRemove={true}
                   onRemove={() => onRemovePending(dateStr, shiftType)}
@@ -64,7 +67,7 @@ function CalendarCell({ date, dateStr, isCurrentMonth, confirmedShifts, pendingS
   )
 }
 
-function ShiftChip({ shiftType, name, isPending, canRemove, onRemove }) {
+function ShiftChip({ shiftType, name, time, isPending, canRemove, onRemove }) {
   const meta = SHIFT_META[shiftType]
   return (
     <div
@@ -75,7 +78,7 @@ function ShiftChip({ shiftType, name, isPending, canRemove, onRemove }) {
       ]
         .filter(Boolean)
         .join(' ')}
-      title={`${meta.label}: ${name}`}
+      title={`${meta.label} (${time}): ${name}`}
     >
       <span className="shift-chip__emoji">{meta.emoji}</span>
       <span

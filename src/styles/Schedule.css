@@ -93,8 +93,23 @@
   line-height: 1;
 }
 
-.shift-block__label {
+.shift-block__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
   flex: 1;
+}
+
+.shift-block__label {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.shift-block__time {
+  font-size: 0.68rem;
+  font-weight: 400;
+  opacity: 0.7;
+  line-height: 1.2;
 }
 
 /* ── Sidebar divider & barista list ─────────────────────────────────────── */
@@ -237,6 +252,8 @@
   color: #7a6040;
   padding: 0.4rem 0;
 }
+
+.day-label-short { display: none; }
 
 .calendar-grid {
   display: grid;
@@ -426,4 +443,178 @@
   justify-content: center;
   color: #7a6040;
   font-size: 1rem;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
+   MOBILE  ≤ 640px
+   ════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* Stack sidebar above the calendar instead of beside it */
+  .schedule-layout {
+    flex-direction: column;
+    height: 100dvh;
+    height: calc(100vh - 56px); /* fallback for older browsers */
+    overflow: hidden;
+  }
+
+  /* Sidebar becomes a compact horizontal top bar */
+  .shift-sidebar {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #3a2a14;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    gap: 0.6rem;
+    overflow-x: auto;
+    flex-shrink: 0;
+    /* Prevent sidebar from growing tall */
+    height: auto;
+  }
+
+  /* Hide hint text and barista list — no room on mobile */
+  .sidebar-hint,
+  .sidebar-divider,
+  .sidebar-baristas {
+    display: none;
+  }
+
+  /* "Shift Types" label — tiny and inline */
+  .sidebar-title {
+    font-size: 0.6rem;
+    white-space: nowrap;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  /* Shift blocks in a horizontal row */
+  .shift-blocks {
+    flex-direction: row;
+    gap: 0.4rem;
+    flex-shrink: 0;
+  }
+
+  .shift-block {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-height: 44px; /* comfortable tap target */
+  }
+
+  /* Hide time subtext in the sidebar buttons — too cramped */
+  .shift-block__time {
+    display: none;
+  }
+
+  /* Main fills all remaining vertical space */
+  .schedule-main {
+    flex: 1;
+    padding: 0.4rem 0.35rem 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .schedule-nav {
+    margin-bottom: 0.4rem;
+    gap: 0.5rem;
+  }
+
+  .schedule-month-title {
+    font-size: 0.95rem;
+    min-width: 0;
+    flex: 1;
+    text-align: center;
+  }
+
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* Calendar day-of-week header */
+  .calendar-header__cell {
+    font-size: 0.55rem;
+    padding: 0.2rem 0;
+    letter-spacing: 0;
+  }
+
+  .day-label-long  { display: none; }
+  .day-label-short { display: inline; }
+
+  /* Calendar cells — taller for touch, less padding */
+  .calendar-cell {
+    min-height: 70px;
+    padding: 0.2rem 0.15rem;
+    border-radius: 4px;
+  }
+
+  .calendar-cell__day {
+    font-size: 0.62rem;
+    margin-bottom: 0.15rem;
+  }
+
+  /* Shift chips — compact but readable */
+  .shift-chip {
+    font-size: 0.58rem;
+    padding: 1px 3px;
+    gap: 1px;
+  }
+
+  .shift-chip__avatar {
+    width: 11px;
+    height: 11px;
+    font-size: 0.45rem;
+  }
+
+  .shift-chip__emoji {
+    font-size: 0.55rem;
+  }
+
+  /* Bigger tap zone for the × remove button */
+  .shift-chip__remove {
+    font-size: 1rem;
+    padding: 0 1px;
+    min-width: 16px;
+    min-height: 16px;
+  }
+
+  /* Confirm bar */
+  .schedule-confirm-bar {
+    padding: 0.5rem 0 0.6rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-confirm {
+    font-size: 0.85rem;
+    padding: 0.55rem 1.2rem;
+    flex: 1;
+    min-height: 44px;
+  }
+
+  .status-msg {
+    font-size: 0.78rem;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ── Very small phones (< 380px) ─────────────────────────────────────────── */
+@media (max-width: 380px) {
+  .shift-block {
+    padding: 0.35rem 0.45rem;
+    font-size: 0.72rem;
+  }
+
+  .shift-block__label {
+    font-size: 0.72rem;
+  }
+
+  .calendar-cell {
+    min-height: 58px;
+  }
 }

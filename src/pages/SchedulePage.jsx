@@ -121,6 +121,15 @@ function SchedulePage({ user, barista }) {
     )
     if (alreadyConfirmed) return
 
+    // Warn if shared shift on a non-preferred day (Mon–Thu)
+    if (shiftType === 'shared') {
+      const dropDate = new Date(dateStr + 'T12:00:00')
+      const dow = dropDate.getDay() // 0=Sun, 5=Fri, 6=Sat
+      if (![0, 5, 6].includes(dow)) {
+        showStatus('error', 'Heads up: shared shifts are preferred on Fri, Sat & Sun.')
+      }
+    }
+
     setPendingShifts((prev) => {
       const dayPending = prev[dateStr] || {}
       if (dayPending[shiftType]) return prev  // already pending — no-op
