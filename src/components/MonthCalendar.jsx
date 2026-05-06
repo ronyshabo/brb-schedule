@@ -45,7 +45,6 @@ function MonthCalendar({
           </div>
         ))}
       </div>
-      </div>
 
       {/* Day grid */}
       <div className="calendar-grid">
