@@ -5,6 +5,7 @@ import { auth, db } from './firebase/config'
 import Login from './pages/Login'
 import SignUp from './pages/SignUp'
 import SchedulePage from './pages/SchedulePage'
+import AdBlockerBanner from './components/AdBlockerBanner'
 import './App.css'
 
 function App() {
@@ -70,38 +71,38 @@ function App() {
     setBarista(null)
   }
 
-  if (loading) {
-    return (
-      <div className="app-loading">
-        <span>☕</span>
-        <p>Loading…</p>
-      </div>
-    )
-  }
-
-  if (!user) {
-    return showSignUp ? (
-      <SignUp setShowSignUp={setShowSignUp} />
-    ) : (
-      <Login setShowSignUp={setShowSignUp} />
-    )
-  }
-
   return (
-    <div className="app">
-      <nav className="navbar">
-        <span className="navbar__brand">☕ BRB Schedule</span>
-        <div className="navbar__right">
-          <span className="navbar__user">
-            {barista?.baristaName ?? user.email}
-          </span>
-          <button className="navbar__logout" onClick={handleLogout}>
-            Log out
-          </button>
+    <>
+      <AdBlockerBanner />
+
+      {loading ? (
+        <div className="app-loading">
+          <span>☕</span>
+          <p>Loading…</p>
         </div>
-      </nav>
-      <SchedulePage user={user} barista={barista} />
-    </div>
+      ) : !user ? (
+        showSignUp ? (
+          <SignUp setShowSignUp={setShowSignUp} />
+        ) : (
+          <Login setShowSignUp={setShowSignUp} />
+        )
+      ) : (
+        <div className="app">
+          <nav className="navbar">
+            <span className="navbar__brand">☕ BRB Schedule</span>
+            <div className="navbar__right">
+              <span className="navbar__user">
+                {barista?.baristaName ?? user.email}
+              </span>
+              <button className="navbar__logout" onClick={handleLogout}>
+                Log out
+              </button>
+            </div>
+          </nav>
+          <SchedulePage user={user} barista={barista} />
+        </div>
+      )}
+    </>
   )
 }
 
